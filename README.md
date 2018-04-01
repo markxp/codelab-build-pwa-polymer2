@@ -17,3 +17,7 @@ An app shell has:
 - logic to switch pages (fragments) based on a given route.
 - It sites on [critical rendering path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/), and should be as light as possible.
 - lazy loading for resources that are unnecessary for first meaningful paint.
+
+note:
+web component dependencies: `bower install --save PolymerElements/app-route#^2`
+CSS : `@apply` does not require parentheses
