@@ -15,5 +15,5 @@ An app shell has:
 
 - basic UI
 - logic to switch pages (fragments) based on a given route.
-- It sites on critical rendering path, and should be as light as possible.
+- It sites on [critical rendering path](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/), and should be as light as possible.
 - lazy loading for resources that are unnecessary for first meaningful paint.
