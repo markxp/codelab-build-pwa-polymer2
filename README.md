@@ -21,3 +21,6 @@ An app shell has:
 note:
 web component dependencies: `bower install --save PolymerElements/app-route#^2`
 CSS : `@apply` does not require parentheses
+
+We does not create an event listener (setup-toolbar)
+

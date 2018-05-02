@@ -85,7 +85,7 @@
                tail="{{subroute}}"></app-route>
     <app-header condenses reveals threshold="1">
       <app-toolbar sticky>
-        <paper-icon-button id="leftItem"></paper-icon-button>
+        <paper-icon-button id="leftItem" on-click="setupToolbar(e)"></paper-icon-button>
         <a href="/" title="Developer Channel">
           <svg class="chrome-logo" xmlns="http://www.w3.org/2000/svg" viewBox="15.5 15.5 224.5 224.5">
             <defs>
@@ -148,7 +148,14 @@
 
         };
       }
-
+      setupToolbar(e) {
+        e.detail.leftItemClickAction;
+        if (e.detail.leftItemIcon) {
+          this.$.leftItem.setAttribute('icon', e.detail.leftItemIcon);
+        } else {
+          this.$.leftItem.removeAttribute('icon');
+        }
+      }
     }
 
     window.customElements.define(ShowApp.is, ShowApp);
