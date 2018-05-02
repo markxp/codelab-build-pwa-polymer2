@@ -24,3 +24,9 @@ CSS : `@apply` does not require parentheses
 
 We does not create an event listener (setup-toolbar)
 
+### step 6 adding the rest of the elements
+
+In this step, we learn how to defined our own iconset.
+
+Your iconset should use <iron-iconset-svg> to defined a set of images. see show-icons.html.
+
