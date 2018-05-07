@@ -15,5 +15,16 @@
 </dom-module>
 
 <script>
-    
+    class ShowVideoPage extends Polymer.Element {
+      static get is(){return 'show-video-page';}
+      static get properties(){
+        return{
+          subroute: {
+            type: Object
+          }
+        };
+      }
+    }
+
+    window.customElements.define(ShowVideoPage.is, ShowVideoPage);
 </script>
