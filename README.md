@@ -42,3 +42,7 @@ It fetches contextual data, which loads next piece of data by pageToken at the s
 Polymer 2 has many syntax differences to Polymer 1 here, which covers [simple observer,
 complex observer(computed property)](https://www.polymer-project.org/2.0/docs/devguide/observers),
 [fire custom event](https://www.polymer-project.org/2.0/docs/devguide/events#custom-events)
+
+It is a mistake ignoring the 'setup-toolbar' event at show-app.html element at step 5.
+We fixed it and notice the logic changed. It should not listen to paper-icon-button on-click event, but
+changing the functionality it should do when 'setup-toolbar' event happens.
