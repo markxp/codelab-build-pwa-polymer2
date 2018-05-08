@@ -42,3 +42,14 @@ It fetches contextual data, which loads next piece of data by pageToken at the s
 Polymer 2 has many syntax differences to Polymer 1 here, which covers [simple observer,
 complex observer(computed property)](https://www.polymer-project.org/2.0/docs/devguide/observers),
 [fire custom event](https://www.polymer-project.org/2.0/docs/devguide/events#custom-events)
+
+### step 8
+
+Set \<google-youtube\> element to selected video.
+The element height is using CSS calc() function. For instance,
+"calc(A + B)". Notice the space between operator, which is neccessary.
+
+There is a cool [example](https://codepen.io/th61855/pen/tAzBC).
+
+Review the custom event 'setup-toolbar' - it has two properties: leftItemIcon and leftItemClickAction.
+When 'setup-toolbar' event is fired, the event object carries these two information and make the toolbar button useful.

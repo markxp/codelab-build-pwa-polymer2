@@ -1,16 +1,30 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../../bower_components/google-youtube/google-youtube.html">
+
 <dom-module id="show-video-page">
     <template>
-        <style>
-            :host {
-              display: block;
-            }
-            .video-frame {
-              background-color: black;
-              height: calc(100vh-64px);
-            }
-          </style>
+      <style>
+        :host {
+          display: block;
+        }
+        .video-frame {
+          background-color: black;
+          height: calc(100vh - 64px);          
+        }
+      </style>
+
+      <div class="video-frame">
+        <!-- app-toolbar 64px height -->
+        <google-youtube
+          width="100%"
+          height="calc(100vh - 64px)"
+          video-id="[[videoId]]"
+          rel="0"
+          start="5"
+          autoplay="1"
+        ></google-youtube>
+      </div>
     </template>
 </dom-module>
 
@@ -21,8 +35,30 @@
         return{
           subroute: {
             type: Object
+          },
+          videoId: {
+            type: String,
+            computed: '_getVideoId(subroute)'
+          },
+          
+          active: {
+            type: Boolean,
+            observer: "_activeDidChange"
           }
         };
+      }
+      
+      _getVideoId(subroute) {
+        return subroute && subroute.path ? subroute.path.substr(1) : "";
+      }
+
+      _activeDidChange(newVal, oldVal) {
+        if(newVal) {
+          this.dispatchEvent(new CustomEvent ('setup-toolbar',{
+            leftItemIcon: "arrow-back",
+            leftItemClickAction: () => { window.history.back();}
+          }));
+        }
       }
     }
 
