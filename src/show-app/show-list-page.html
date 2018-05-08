@@ -1,5 +1,13 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 
+<link rel="import" href="../../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+
 <dom-module id="show-list-page">
     <template>
         <style>
@@ -105,5 +113,209 @@
               }
             }
         </style>
+        <iron-ajax auto
+        url="https://www.googleapis.com/youtube/v3/search?part=snippet&q=[[show.q]]&channelId=UCnUYZLuoy1rq1aVMwx4aTzw&order=date&maxResults=20&pageToken=[[pageToken]]&key=AIzaSyA053VCd78p0v2Pica01W_ljGUSAfzl0vA"
+        handle-as="json"
+        on-response="_onXhrResponse"
+        ></iron-ajax>
+       
+        <app-drawer opened="{{openedDrawer}}"
+            persistent="[[persistentDrawer]]">
+            <ul class="nav" role="navigation">
+                <h2>Shows</h2>
+                <iron-selector selected="[[shows.subroute]]" 
+                  attr-for-selected="name"
+                  selected-class="active"
+                  >
+                  <template is="dom-repeat"
+                    items="[[shows]]" as="show">
+                    <li name="[[show.subroute]]">
+                        <a href="/shows/[[show.subroute]]">[[show.name]]</a>
+                    </li>
+                  </template>
+                </iron-selector>
+            </ul>
+        </app-drawer>
+
+        <iron-media-query
+        query="max-width: 1280px"
+        query-matches="{{smallScreen}}"></iron-media-query>
+
+        <iron-list id="list" scroll-target="document" items="[[items]]" grid>
+            <template>
+                <div class="grid-item">
+                    <a href="/video/[[item.id.videoId]]" style$="background-image: url([[item.snippet.thumbnails.high.url]]);">
+                        <p class="title">[[item.snippet.title]]</p>
+                    </a>
+                </div>
+            </template>
+        </iron-list>
+
+        <iron-scroll-threshold
+          id="scrollThreshold"
+          scroll-target="document"
+          lower-threshold="0"
+          on-lower-threshold="_onLowerThreshold"
+        ></iron-scroll-threshold>
+
+        <div class="loading-indicator" off$="[[lastPage]]">More videos to come...</div>
+
     </template>
 </dom-module>
+<script>
+    class ShowListPage extends Polymer.Element {
+        static get is() {return 'show-list-page';}
+        static get properties(){
+            return {
+                smallScreen: {
+                    type: Boolean
+                },
+                openedDrawer: {
+                    type: Boolean,
+                    value: true
+                },
+                persistentDrawer: {
+                    type: Boolean,
+                    value: true
+                },
+                shows: {
+                    type: Array,
+                    value: () => {
+                        return [
+                            {name: "All", subroute: "all", q: ""},
+                            {name: "Polycasts", subroute: "polycasts", q: "polycasts"},
+                            {name: "Totally Tooling Tips", subroute: "tips", q: "totally tooling"},
+                            {name: "A11ycasts", subroute: "a11ycasts", q: "a11ycasts"},
+                            {name: "Supercharged", subroute: "supercharged", q: "supercharged"}
+                        ];
+                    }
+                },
+
+                subroute: {
+                    type: Object
+                },
+
+                // show is the current show
+                show: {
+                    type: Object,
+                    computed: "_getActiveShow(shows, subroute)",
+                    observer: "_showChanged(newVal, oldVal)"
+                },
+                pageToken: {
+                    type: String,
+                    value: ''
+                },
+                lastPage: {
+                    type: Boolean
+                },
+
+
+                active: {
+                    type: Boolean
+                },
+
+                items:{
+                    type: Array,
+                    value: () => {return [];}
+                },
+                nextPageToken:{
+                    type: String
+                },
+                pageToken: {
+                    type: String,
+                    value: ""
+                },
+                currentShow:{
+                    type: String
+                }
+            };
+        }
+
+        static get observers() {
+            return [
+                '_updateToolbar(active, smallScreen)'
+            ];
+        }
+
+        connectedCallback(){
+            super.connectedCallback();
+        }
+
+
+
+        _getActiveShow(shows, subroute) {
+            let key = "all";
+            if (subroute !== undefined && subroute.path !== ""){
+                key = subroute.path.substr(1);
+            }
+            let res = shows.filter((show) => { return show.subroute == key;});
+            return res[0] ? res[0] : shows[0];
+        }
+
+        /* _showChanged is the observer for "show" property.
+        ** It refresh pageToken
+        */
+        _showChanged(newVal, oldVal){
+            this.pageToken = '';
+            this.lastPage = false;
+            this.openedDrawer = this.persistentDrawer;
+        }
+
+        /* _updateToolbar observes 'active' and 'smallscreen'. 
+        ** If 'active' is true, it fires a custom event 'setup-toolbar'
+        ** the event has two properties, 'leftItemIcon' and 'leftItemClickAction'
+        ** 
+        ** Otherwise, it sets 'persistentDrawer' and 'openedDrawer' 
+        ** depends on 'smallScreen'.
+        */
+        _updateToolbar(active, smallScreen) {
+            if(active) {
+                this.dispatchEvent(new CustomEvent ('setup-toolbar',{
+                    leftItemIcon: smallScreen ? 'menu' : '',
+                    leftItemClickAction: () => { this.openedDrawer = true; }    
+                }));
+            }
+            this.persistentDrawer = !smallScreen;
+            this.openedDrawer = !smallScreen;
+        }
+
+        _onXhrResponse(e){
+            const response = e.detail.response;
+            const items = response.items;
+            if(items.length === 0){
+              this.lastPage = true;  
+            } else {
+                // exclude exceptions
+                if (this.currentShow != this.show){
+                    // polymer set function
+                    // it tells data binding system that 'items' is changed
+                    this.set('items',[]);
+                }
+                
+                // why totalResults?
+                this.totalResults = response.pageInfo.totalResults;
+
+                // if nextPageToken is undefined, it's the last page.
+                if(!response.nextPageToken){
+                    this.lastPage = true;
+                } else {
+                    this.nextPageToken = response.nextPageToken;
+                }
+
+                this.currentShow = this.show;
+                items.forEach( (element) => {
+                    this.push('items', element);
+                });
+            }
+
+            // clear iron-scroll-threshold trigger
+            this.$.scrollThreshold.clearTriggers();
+        }
+
+        _onLowerThreshold() {
+            this.pageToken = this.nextPageToken;
+        }
+    }
+
+    window.customElements.define(ShowListPage.is,ShowListPage);
+</script>

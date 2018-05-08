@@ -28,5 +28,17 @@ We does not create an event listener (setup-toolbar)
 
 In this step, we learn how to defined our own iconset.
 
-Your iconset should use <iron-iconset-svg> to defined a set of images. see show-icons.html.
+Your iconset should use \<iron-iconset-svg\> to defined a set of images. see show-icons.html.
 
+### step 7
+
+This is the main video list element.
+It contains the app-drawer part and the video grid list.
+
+It fetches videoes from Chrome Developer Youtube Channel, and filters them by name.
+We uses \<iron-ajax\> element to fetch Youtube Data API.
+It fetches contextual data, which loads next piece of data by pageToken at the scroll threshold bound.
+
+Polymer 2 has many syntax differences to Polymer 1 here, which covers [simple observer,
+complex observer(computed property)](https://www.polymer-project.org/2.0/docs/devguide/observers),
+[fire custom event](https://www.polymer-project.org/2.0/docs/devguide/events#custom-events)
