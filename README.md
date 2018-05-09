@@ -58,4 +58,6 @@ When 'setup-toolbar' event is fired, the event object carries these two informat
 
 Build a polymer.json for prodution server.
 
+Here we are going to provide a service worker
+for offline cases and pre-cache "fregents" for lightening fast loading.
 we eliminate app.yaml from "extraDependencies" because we are going to serve on firebase.
