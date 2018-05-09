@@ -30,7 +30,7 @@ In this step, we learn how to defined our own iconset.
 
 Your iconset should use \<iron-iconset-svg\> to defined a set of images. see show-icons.html.
 
-### step 7
+### step 7 the list page
 
 This is the main video list element.
 It contains the app-drawer part and the video grid list.
@@ -43,7 +43,7 @@ Polymer 2 has many syntax differences to Polymer 1 here, which covers [simple ob
 complex observer(computed property)](https://www.polymer-project.org/2.0/docs/devguide/observers),
 [fire custom event](https://www.polymer-project.org/2.0/docs/devguide/events#custom-events)
 
-### step 8
+### step 8 the video page
 
 Set \<google-youtube\> element to selected video.
 The element height is using CSS calc() function. For instance,
@@ -53,3 +53,9 @@ There is a cool [example](https://codepen.io/th61855/pen/tAzBC).
 
 Review the custom event 'setup-toolbar' - it has two properties: leftItemIcon and leftItemClickAction.
 When 'setup-toolbar' event is fired, the event object carries these two information and make the toolbar button useful.
+
+### step 9 building for production
+
+Build a polymer.json for prodution server.
+
+we eliminate app.yaml from "extraDependencies" because we are going to serve on firebase.
