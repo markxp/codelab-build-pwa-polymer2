@@ -1,2 +1,4 @@
 bower_components/**
+build/**/**
 polymer-1-source-code/**
+.firebaserc
