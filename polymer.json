@@ -5,14 +5,20 @@
     "src/show-app/show-list-page.html",
     "src/show-app/show-video-page.html"
   ],
-  "sourceGlobs": [
+  "sources": [
    "src/**/*",
    "bower.json"
   ],
-  "includeDependencies": [
+  "extraDependencies": [
     "manifest.json",
     "images/*",
     "bower_components/webcomponentsjs/webcomponents-lite.js"
+  ],
+  "builds": [
+    {
+      "preset": "es6-unbundled",
+      "name": "default"
+    }
   ],
   "lint": {
     "rules": [
