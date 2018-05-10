@@ -4,6 +4,26 @@
 Transport to polymer 2
 This example build a chrome developer channel skelton in PWA way.
 
+Checkout each branches for more detail.
+
+## Quickstart
+
+- git clone https://github.com/markxp/codelab-build-pwa-polymer2.git
+
+- npm install -g polymer-cli bower
+
+- npm install -g firebase-tools  # (optional, if you want to deploy to other place)
+
+- bower install && polymer build
+
+- polymer serve # preview locally
+
+- firebase deploy # (optional) deploy to an exsisting firebase project
+
+## todo
+
+add prpl-server-node quickstart on gae.
+
 ## step 4 configuring the entrypoint
 
 [app shell](https://developers.google.com/web/fundamentals/architecture/app-shell) contains basic UI and should be cached in browser.
